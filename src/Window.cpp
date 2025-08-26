@@ -60,6 +60,15 @@ void Window::HandlePlayerInputs(const std::optional<sf::Event> &event)
         else if (keyPressed->scancode == sf::Keyboard::Scancode::F5)
         {
             ToggleFullscreen();
+        } else if (keyPressed->scancode == sf::Keyboard::Scancode::O) {
+            static int index = 0;
+            sf::Texture texture;
+            texture.resize({m_window.getSize().x, m_window.getSize().y});
+            texture.update(m_window);
+            std::string filename = "app" + std::to_string(index) + ".png";
+            if (texture.copyToImage().saveToFile(filename)) {
+                index++;
+            }
         }
     }
 }
