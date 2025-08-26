@@ -1,5 +1,6 @@
 #include "Window.h"
 #include "Globals.h"
+#include <iostream>
 
 Window::Window(const sf::String &title, const sf::Vector2u &size)
 {
@@ -79,6 +80,11 @@ void Window::Create()
     sf::VideoMode videoMode{sf::Vector2u( m_windowSize.x, m_windowSize.y)};
     m_window.create(videoMode, m_windowTitle, style);
     m_window.setActive(true);
+    sf::Image icon;
+    if (!icon.loadFromFile("assets/icon.png")) {
+        std::cout << "Not found icon." << std::endl;
+    }
+    m_window.setIcon({icon.getSize().x, icon.getSize().y}, icon.getPixelsPtr());
 }
 
 void Window::Destroy()
