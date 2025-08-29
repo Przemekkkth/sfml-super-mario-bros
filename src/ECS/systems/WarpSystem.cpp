@@ -89,7 +89,8 @@ void WarpSystem::tick(World *world)
         auto *playerMove = player->getComponent<MovingComponent>();
 
         if (!AABB::isTotalCollision(playerTransform, entity->getComponent<TransformComponent>())
-            || (WarpSystem::isClimbing() && playerMove->getVelocity().y != 0.0f)) {
+            || (WarpSystem::isClimbing() && playerMove->getVelocity().y != 0.0f)
+            || entity->getComponent<VineComponent>()->getVineParts().get()->size() < 3) {
             return;
         }
 
@@ -97,9 +98,16 @@ void WarpSystem::tick(World *world)
         player->addComponent<FrictionExemptComponent>();
         player->remove<GravityComponent>();
 
-        player->getComponent<TextureComponent>()->setHorizontalFlipped(true);
-        playerTransform->setLeft(entity->getComponent<TransformComponent>()->getRight()
-                                 - GLOBALS::SCALED_CUBE_SIZE / 2);
+        if (playerTransform->getLeft() > entity->getComponent<TransformComponent>()->getLeft()
+                                             + float(GLOBALS::SCALED_CUBE_SIZE) / 2.0f) {
+            playerTransform->setLeft(entity->getComponent<TransformComponent>()->getRight()
+                                     - float(GLOBALS::SCALED_CUBE_SIZE) / 2.1f);
+            player->getComponent<TextureComponent>()->setHorizontalFlipped(true);
+        } else {
+            playerTransform->setRight(entity->getComponent<TransformComponent>()->getLeft()
+                                      + GLOBALS::SCALED_CUBE_SIZE / 2);
+        }
+
         WarpSystem::setClimbing(true);
         PlayerSystem::setEnableInput(false);
 

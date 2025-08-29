@@ -68,9 +68,17 @@ public:
                 // Sets mario's position to be at the bottom of the vine
                 playerTransform->setTop(
                     vineParts->back()->getComponent<TransformComponent>()->getTop());
-                playerTransform->setLeft(
-                    vineParts->back()->getComponent<TransformComponent>()->getRight()
-                    - GLOBALS::SCALED_CUBE_SIZE / 2);
+
+                if (playerTransform->getLeft() > vine->getComponent<TransformComponent>()->getLeft()
+                                                     + float(GLOBALS::SCALED_CUBE_SIZE) / 2.0f) {
+                    playerTransform->setLeft(vine->getComponent<TransformComponent>()->getRight()
+                                             - float(GLOBALS::SCALED_CUBE_SIZE) / 2.1f);
+                    player->getComponent<TextureComponent>()->setHorizontalFlipped(true);
+                } else {
+                    playerTransform->setRight(vine->getComponent<TransformComponent>()->getLeft()
+                                              + GLOBALS::SCALED_CUBE_SIZE / 2);
+                }
+                
             }),
             /* Wait until the vine has fully moved up, and then stop the vines from growing more */
             new WaitUntilCommand([=]() -> bool {
