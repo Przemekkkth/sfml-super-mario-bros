@@ -137,17 +137,21 @@ void WarpSystem::tick(World *world)
                     playerMove->getVelocity().x = playerMove->getAcceleration().x
                         = playerMove->getVelocity().y = playerMove->getAcceleration().y = 0.0f;
 
-                    Camera::GetInstance().setCameraX(m_teleportCameraCoordinates.x);
-                    Camera::GetInstance().setCameraY(m_teleportCameraCoordinates.y);
-                    Camera::GetInstance().setCameraMaxX(m_teleportCameraMax);
+                    if (m_teleportCameraCoordinates != sf::Vector2i(0, 0)) {
+                        Camera::GetInstance().setCameraX(m_teleportCameraCoordinates.x);
+                        Camera::GetInstance().setCameraY(m_teleportCameraCoordinates.y);
+                        playerTransform->setPosition(sf::Vector2f(m_teleportPlayerCoordinates.x,
+                                                                  m_teleportPlayerCoordinates.y));
+                    }
+                    if (m_teleportCameraMax > 0) {
+                        Camera::GetInstance().setCameraMaxX(m_teleportCameraMax);
+                    }
 
                     //TextureManager::Get().SetBackgroundColor(teleportBackgroundColor);
 
                     //scene->setCurrentLevelType(teleportLevelType);
                     //scene->setLevelMusic(teleportLevelType);
 
-                    playerTransform->setPosition(
-                        sf::Vector2f(m_teleportPlayerCoordinates.x, m_teleportPlayerCoordinates.y));
                     //playerPosition->position = teleportPlayerCoordinates.convertTo<float>();
 
                     m_teleportPlayerCoordinates = sf::Vector2i(0, 0);
@@ -156,7 +160,7 @@ void WarpSystem::tick(World *world)
                     m_teleportBackgroundColor = sf::Color(0, 0, 0);
                     m_teleportLevelType = LevelType::None;
                 },
-                2.0));
+                1.0f));
         }
     }
 }
