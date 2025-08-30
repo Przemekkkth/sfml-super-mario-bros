@@ -10,6 +10,7 @@
 #include "ECS/systems/PhysicsSystem.h"
 #include "ECS/systems/PlayerSystem.h"
 #include "ECS/systems/RenderSystem.h"
+#include "ECS/systems/SoundSystem.h"
 #include "ECS/systems/WarpSystem.h"
 #include "Game.h"
 #include "Globals.h"
@@ -39,6 +40,7 @@ GameWorld::GameWorld(StateManager *stateManager)
     m_world->registerSystem<CallbackSystem>();
     m_world->registerSystem<FlagSystem>(this);
     m_world->registerSystem<WarpSystem>(this);
+    m_world->registerSystem<SoundSystem>();
 }
 
 GameWorld::~GameWorld()
@@ -47,6 +49,11 @@ GameWorld::~GameWorld()
 
 void GameWorld::HandlePlayerInput(const std::optional<sf::Event> &event)
 {
+    if (const auto *keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+        if (keyPressed->scancode == sf::Keyboard::Scancode::P && m_world->getSystem<SoundSystem>()) {
+            m_world->getSystem<SoundSystem>()->playSound(SoundID::Pause);
+        }
+    }
     m_world->handleInput(event);
 }
 

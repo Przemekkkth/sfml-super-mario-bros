@@ -35,6 +35,7 @@
 #include "../components/PlayerComponent.h"
 #include "../components/ProjectileComponent.h"
 #include "../components/RightCollisionComponent.h"
+#include "../components/SoundComponent.h"
 #include "../components/SpritesheetComponent.h"
 #include "../components/TextureComponent.h"
 #include "../components/TileComponent.h"
@@ -724,8 +725,8 @@ void PlayerSystem::checkCollisionWithBreakBlock()
                             createBlockDebris(breakable);
                             m_world->destroy(breakable);
 
-                            //Entity *breakSound(world->create());
-                            //breakSound->addComponent<SoundComponent>(SoundID::BLOCK_BREAK);
+                            Entity *breakSound(m_world->create());
+                            breakSound->addComponent<SoundComponent>(SoundID::BlockBreak);
                         },
                         1);
                     return;
@@ -736,8 +737,8 @@ void PlayerSystem::checkCollisionWithBreakBlock()
                 std::vector<int> yChanges{-3, -3, -2, -1, 1, 2, 3, 3};
                 breakable->addComponent<BlockBumpComponent>(yChanges);
 
-                //Entity *bumpSound(world->create());
-                //bumpSound->addComponent<SoundComponent>(SoundID::BLOCK_HIT);
+                Entity *bumpSound(m_world->create());
+                bumpSound->addComponent<SoundComponent>(SoundID::BlockHit);
             }
 
             breakable->remove<BottomCollisionComponent>();
@@ -796,16 +797,16 @@ void PlayerSystem::checkCollisionWithPowerUp()
             Entity *coinScore(m_world->create());
             coinScore->addComponent<AddScoreComponent>(100, true);
 
-            //Entity* coinSound(world->create());
-            //coinSound->addComponent<SoundComponent>(SoundID::COIN);
+            Entity *coinSound(m_world->create());
+            coinSound->addComponent<SoundComponent>(SoundID::Coin);
 
             m_world->destroy(collectible);
         } break;
         case CollectibleType::OneUp: {
             grow(GrowType::OneUp);
 
-            //Entity* oneUpSound(world->create());
-            //oneUpSound->addComponent<SoundComponent>(SoundID::ONE_UP);
+            Entity *oneUpSound(m_world->create());
+            oneUpSound->addComponent<SoundComponent>(SoundID::OneUp);
 
             m_world->destroy(collectible);
         } break;
@@ -1142,6 +1143,8 @@ void PlayerSystem::onGameOver(bool outOfBounds)
     m_mario->addComponent<ParticleComponent>();
     spritesheet->setSpritesheetCoordinates(Map::PlayerIDCoordinates.at(1));
     m_currentState = AnimationState::Gameover;
+    auto deathSound = m_world->create();
+    deathSound->addComponent<SoundComponent>(SoundID::Death);
 
     m_mario->addComponent<CallbackComponent>(
         [](Entity *entity) {
@@ -1307,8 +1310,8 @@ void PlayerSystem::createFireball()
                 entity->addComponent<DestroyDelayedComponent>(4);
                 entity->remove<MovingComponent, GravityComponent, FrictionExemptComponent>();
 
-                //Entity* fireballHitSound(world->create());
-                //fireballHitSound->addComponent<SoundComponent>(SoundID::BLOCK_HIT);
+                Entity *fireballHitSound(m_world->create());
+                fireballHitSound->addComponent<SoundComponent>(SoundID::BlockHit);
             } else {
                 m_world->destroy(entity);
             }
@@ -1320,6 +1323,9 @@ void PlayerSystem::createFireball()
 void PlayerSystem::shrink()
 {
     m_mario->getComponent<PlayerComponent>()->setPlayerState(PlayerState::SmallMario);
+    Entity *shrinkSound = m_world->create();
+    shrinkSound->addComponent<SoundComponent>(SoundID::Shrink);
+
     std::vector<int> frameIDs{25, 45, 46, 25, 45, 46, 25, 45, 46};
     const int framesPerSecond = 12;
 
@@ -1371,8 +1377,8 @@ void PlayerSystem::grow(GrowType type)
         addScore->addComponent<AddScoreComponent>(1000);
         auto floatingText = m_world->create();
         floatingText->addComponent<CreateFloatingTextComponent>(m_mario, "1000");
-        // local powerUpSound = Concord.entity(world)
-        // powerUpSound:give('sound_component', SOUND_ID.POWER_UP_COLLECT)
+        auto powerUpSound = m_world->create();
+        powerUpSound->addComponent<SoundComponent>(SoundID::PowerUpCollect);
         if (isSuperMario() || isFireMario()) {
             return;
         }
@@ -1411,11 +1417,9 @@ void PlayerSystem::grow(GrowType type)
         auto floatingText = m_world->create();
         floatingText->addComponent<CreateFloatingTextComponent>(m_mario, "1000");
 
-        /*
+        auto powerUpSound = m_world->create();
+        powerUpSound->addComponent<SoundComponent>(SoundID::PowerUpCollect);
 
-        local powerUpSound = Concord.entity(world)
-        powerUpSound:give('sound_component', SOUND_ID.POWER_UP_COLLECT)
-*/
         if (isFireMario()) {
             return;
         }
@@ -1443,8 +1447,8 @@ void PlayerSystem::launchFireballs()
         createFireball();
         m_launchFireball = 0;
 
-        //Entity *fireballSound(world->create());
-        //fireballSound->addComponent<SoundComponent>(SoundID::FIREBALL);
+        Entity *fireballSound(m_world->create());
+        fireballSound->addComponent<SoundComponent>(SoundID::Fireball);
     }
 }
 
@@ -1500,8 +1504,8 @@ void PlayerSystem::updateWaterVelocity()
         move->getVelocity().y = -3.5f;
         m_jumpHeld = 0;
 
-        // local jumpSound = Concord.entity(world)
-        // jumpSound:give('sound_component', SOUND_ID.STOMP)
+        auto stompSound = m_world->create();
+        stompSound->addComponent<SoundComponent>(SoundID::Stomp);
 
         m_currentState = AnimationState::Swimming_Jump;
         m_mario->addComponent<WaitUntilComponent>(
@@ -1543,8 +1547,8 @@ void PlayerSystem::updateGroundVelocity()
         m_jumpHeld = 1;
         move->getVelocity().y = -7.3f;
 
-        //        local jumpSound = Concord.entity(world)
-        //  jumpSound:give('sound_component', SOUND_ID.JUMP)
+        auto jumpSound = m_world->create();
+        jumpSound->addComponent<SoundComponent>(SoundID::Jump);
     }
 
     if (m_duck > 0 && (isSuperMario() || isFireMario())) {

@@ -8,6 +8,8 @@ public:
     SoundComponent(SoundID soundID)
         : m_soundID{soundID}
     {}
+    SoundID getSoundID() const { return m_soundID; }
+
 private:
     SoundID m_soundID;
 };

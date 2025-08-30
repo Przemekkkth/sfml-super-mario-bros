@@ -7,6 +7,7 @@
 #include <iostream>
 TextureHolder* Game::s_textureHolder = new TextureHolder;
 FontHolder* Game::s_fontHolder = new FontHolder;
+SoundBufferHolder *Game::s_soundBufferHolder = new SoundBufferHolder;
 
 Game::Game()
     : m_elapsed(0.0f), m_stateManager(&m_context)
@@ -16,6 +17,7 @@ Game::Game()
     loadTextures();
     loadFonts();
     loadMaps();
+    loadSounds();
     m_context.m_window = &m_window;
     m_stateManager.SwitchTo(StateType::MainMenu);
 }
@@ -66,6 +68,31 @@ void Game::loadMaps()
     Map::loadEnemyIDS();
     Map::loadIrregularBlockReferences();
     Map::loadPlayerIDS();
+}
+
+void Game::loadSounds()
+{
+    s_soundBufferHolder->load(SoundID::BlockBreak, "assets/sounds/effects/blockbreak.wav");
+    s_soundBufferHolder->load(SoundID::BlockHit, "assets/sounds/effects/blockhit.wav");
+    s_soundBufferHolder->load(SoundID::BowserFall, "assets/sounds/effects/bowserfall.wav");
+    s_soundBufferHolder->load(SoundID::BowserFire, "assets/sounds/effects/bowserfire.wav");
+    s_soundBufferHolder->load(SoundID::CannonFire, "assets/sounds/effects/cannonfire.wav");
+    s_soundBufferHolder->load(SoundID::CastleClear, "assets/sounds/effects/castleclear.wav");
+    s_soundBufferHolder->load(SoundID::Coin, "assets/sounds/effects/coin.wav");
+    s_soundBufferHolder->load(SoundID::Death, "assets/sounds/effects/death.wav");
+    s_soundBufferHolder->load(SoundID::Fireball, "assets/sounds/effects/fireball.wav");
+    s_soundBufferHolder->load(SoundID::FlagRaise, "assets/sounds/effects/flagraise.wav");
+    s_soundBufferHolder->load(SoundID::GameOver, "assets/sounds/effects/gameover.wav");
+    s_soundBufferHolder->load(SoundID::Jump, "assets/sounds/effects/jump.wav");
+    s_soundBufferHolder->load(SoundID::Kick, "assets/sounds/effects/kick.wav");
+    s_soundBufferHolder->load(SoundID::OneUp, "assets/sounds/effects/oneup.wav");
+    s_soundBufferHolder->load(SoundID::Pause, "assets/sounds/effects/pause.wav");
+    s_soundBufferHolder->load(SoundID::Pipe, "assets/sounds/effects/pipe.wav");
+    s_soundBufferHolder->load(SoundID::PowerUpAppear, "assets/sounds/effects/powerupappear.wav");
+    s_soundBufferHolder->load(SoundID::PowerUpCollect, "assets/sounds/effects/powerupcollect.wav");
+    s_soundBufferHolder->load(SoundID::Shrink, "assets/sounds/effects/shrink.wav");
+    s_soundBufferHolder->load(SoundID::Stomp, "assets/sounds/effects/stomp.wav");
+    s_soundBufferHolder->load(SoundID::TimerTick, "assets/sounds/effects/timertick.wav");
 }
 
 void Game::HandleInput()

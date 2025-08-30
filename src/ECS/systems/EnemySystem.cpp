@@ -25,6 +25,7 @@
 #include "../../ECS/components/PlayerComponent.h"
 #include "../../ECS/components/ProjectileComponent.h"
 #include "../../ECS/components/RightCollisionComponent.h"
+#include "../../ECS/components/SoundComponent.h"
 #include "../../ECS/components/TextureComponent.h"
 #include "../../ECS/components/TimerComponent.h"
 #include "../../ECS/components/TopCollisionComponent.h"
@@ -230,6 +231,9 @@ void EnemySystem::checkEnemyDestroyed(Entity *enemy)
             floatingText->addComponent<CreateFloatingTextComponent>(enemy, std::to_string(100));
 
             enemy->addComponent<DestroyDelayedComponent>(1);
+
+            Entity *kickSound = m_world->create();
+            kickSound->addComponent<SoundComponent>(SoundID::Kick);
         }
         return;
     }
@@ -248,8 +252,8 @@ void EnemySystem::checkEnemyDestroyed(Entity *enemy)
         Entity *floatingText(m_world->create());
         floatingText->addComponent<CreateFloatingTextComponent>(enemy, std::to_string(100));
 
-        //Entity *stompSound(world->create());
-        //stompSound->addComponent<SoundComponent>(SoundID::STOMP);
+        Entity *stompSound(m_world->create());
+        stompSound->addComponent<SoundComponent>(SoundID::Stomp);
     }
 
     //Enemies that were destroyed through either a projectile or super star mario
@@ -269,8 +273,8 @@ void EnemySystem::checkEnemyDestroyed(Entity *enemy)
         Entity *floatingText(m_world->create());
         floatingText->addComponent<CreateFloatingTextComponent>(enemy, std::to_string(100));
 
-        // Entity* destroyedSound(world->create());
-        // destroyedSound->addComponent<SoundComponent>(SoundID::KICK);
+        Entity *destroyedSound(m_world->create());
+        destroyedSound->addComponent<SoundComponent>(SoundID::Kick);
     }
 }
 

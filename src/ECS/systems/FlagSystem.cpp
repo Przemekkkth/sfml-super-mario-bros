@@ -17,6 +17,7 @@
 #include "../../ECS/components/MovingComponent.h"
 #include "../../ECS/components/PlayerComponent.h"
 #include "../../ECS/components/RightCollisionComponent.h"
+#include "../../ECS/components/SoundComponent.h"
 #include "../../ECS/components/TextureComponent.h"
 #include "../../ECS/components/TimerComponent.h"
 #include "../../ECS/components/TransformComponent.h"
@@ -113,8 +114,8 @@ void FlagSystem::climbFlag()
     // scene->stopTimer();
     // scene->stopMusic();
 
-    // Entity *flagSound(world->create());
-    // flagSound->addComponent<SoundComponent>(SoundID::FLAG_RAISE);
+    Entity *flagSound(m_world->create());
+    flagSound->addComponent<SoundComponent>(SoundID::FlagRaise);
 
     player->remove<GravityComponent>();
     player->addComponent<FrictionExemptComponent>();
@@ -236,8 +237,8 @@ void FlagSystem::hitAxe()
             bowser->remove<FrozenComponent>();
             bowser->addComponent<DeadComponent>();
 
-            //Entity *bowserFall(world->create());
-            //bowserFall->addComponent<SoundComponent>(SoundID::BOWSER_FALL);
+            Entity *bowserFall(m_world->create());
+            bowserFall->addComponent<SoundComponent>(SoundID::BowserFall);
         }),
         /* Wait until bowser is not visible in the camera, then destroy the axe and move the player
         */
@@ -249,9 +250,9 @@ void FlagSystem::hitAxe()
             // avoid sequence interruption
             CommandScheduler::getInstance().addCommand(new DelayedCommand(
                 [=]() {
-                    //Entity *castleClear(world->create());
+                    Entity *castleClear(m_world->create());
 
-                    //castleClear->addComponent<SoundComponent>(SoundID::CASTLE_CLEAR);
+                    castleClear->addComponent<SoundComponent>(SoundID::CastleClear);
                 },
                 0.325f));
 
