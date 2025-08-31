@@ -33,6 +33,7 @@
 #include "../Entity.h"
 #include "../World.h"
 #include "HUDSystem.h"
+#include "MusicSystem.h"
 #include "PlayerSystem.h"
 
 bool FlagSystem::inSequence = false;
@@ -113,6 +114,7 @@ void FlagSystem::climbFlag()
 
     // scene->stopTimer();
     // scene->stopMusic();
+    m_world->getSystem<MusicSystem>()->stop();
 
     Entity *flagSound(m_world->create());
     flagSound->addComponent<SoundComponent>(SoundID::FlagRaise);
@@ -158,15 +160,11 @@ void FlagSystem::climbFlag()
                 nextLevelDelay--;
             }
 
-            //m_gameWorld
-            //m_world->getSystem<HUDSystem>()->setEnabled(false);
             auto hudSystem = m_world->getSystem<HUDSystem>();
             if (hudSystem->getGameTime() >= 0) {
                 m_world->getSystem<HUDSystem>()->scoreCountdown();
             }
-            //scene->scoreCountdown();
 
-            //if (scene->scoreCountdownFinished() && nextLevelDelay == 0) {
             if (nextLevelDelay == 0 && hudSystem->scoreCountdownFinished()) {
                 nextLevelDelay = (int) std::round(GLOBALS::FPS * 4.5);
                 return true;
@@ -221,8 +219,8 @@ void FlagSystem::hitAxe()
                 ->addComponent<DestroyDelayedComponent>(1);
             bridgeComponent->getConnectedBridgeParts().pop_back();
 
-            // local bridgeCollapseSound = Concord.entity(world)
-            // bridgeCollapseSound:give('sound_component', SOUND_ID.BLOCK_BREAK)
+            auto bridgeCollapseSound = m_world->create();
+            bridgeCollapseSound->addComponent<SoundComponent>(SoundID::BlockBreak);
 
             if (bridgeComponent->getConnectedBridgeParts().size() == 0) {
                 entity->remove<TimerComponent>();
@@ -304,77 +302,4 @@ void FlagSystem::hitAxe()
                 m_gameWorld->switchLevel();
             },
             3.0f)}));
-
-    /*
-
-   local bridge
-   for _, entity in ipairs(world:getEntities()) do
-      if entity:has('bridge_component') then
-         bridge = entity
-         break
-      end
-   end
-
-   bridge:give('timer_component', 
-   function(entity)
-      local bridgeComponent = entity.bridge_component
-      bridgeComponent.connectedBridgeParts[#bridgeComponent.connectedBridgeParts]:give('destroy_delayed_component', 1)
-      table.remove(bridgeComponent.connectedBridgeParts, #bridgeComponent.connectedBridgeParts)
-
-      local bridgeCollapseSound = Concord.entity(world)
-      bridgeCollapseSound:give('sound_component', SOUND_ID.BLOCK_BREAK)
-
-      if #bridgeComponent.connectedBridgeParts == 0 then
-         entity:remove('timer_component')
-      end
-   end, 5)
-
-   CommandScheduler:addCommand(SequenceCommand({
-      WaitUntilCommand(function() return not bridge:has('timer_component') end),
-      RunCommand(
-         function()
-            bowser:remove('frozen_component')
-            bowser:give('dead_component')
-            local bowserFall = Concord.entity(world)
-            bowserFall:give('sound_component', SOUND_ID.BOWSER_FALL)
-         end
-      ),
-      -- Wait until bowser is not visible in the camera, then destroy the axe and move the player
-      WaitUntilCommand(function() return not CameraInstance:inCameraRange(bowser.position) end),
-      RunCommand(function()
-         -- Play the castle clear sound in 0.325 seconds, this is separate from the sequence to
-         -- avoid sequence interruption
-         CommandScheduler:addCommand(
-            DelayedCommand(
-               function() 
-                  local castleClear = Concord.entity(world)
-                  castleClear:give('sound_component', SOUND_ID.CASTLE_CLEAR)
-               end, 0.325))
-         
-         world:removeEntity(axe)
-         playerMove.velocity.x = 3
-         player:give('gravity_component')
-         player:remove('frozen_component')
-      end),
-      -- Play the castle clear sound in 0.325 seconds, this is separate from the sequence to
-      -- avoid sequence interruption
-      WaitUntilCommand(function() return player:has('right_collision_component') end),
-      RunCommand(function()
-         FlagSystem.inSequence = false
-         CommandScheduler:addCommand(DelayedCommand(
-            function() 
-               local nextLevel = self.scene:getLevelData().nextLevel
-            
-               if nextLevel.x ~= 0 and nextLevel.y ~= 0 then
-                  player.texture:setVisible(false)
-               else
-                  local winMusic = Concord.entity(world)
-                  winMusic:give('music_component', MUSIC_ID.GAME_WON)
-               end
-               self.scene:switchLevel(nextLevel.x, nextLevel.y)
-            end, 5.0))
-      end)
-   }))
-
-*/
 }

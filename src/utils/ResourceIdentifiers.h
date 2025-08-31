@@ -1,9 +1,10 @@
 #ifndef RESOURCEIDENTIFIERS_H
 #define RESOURCEIDENTIFIERS_H
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Audio/SoundBuffer.hpp>
 #include "ResourceHolder.h"
+#include <SFML/Audio/SoundBuffer.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/System/String.hpp>
 
 enum class TextureID {
     Avatar,
@@ -184,6 +185,6 @@ class ResourceHolder;
 using TextureHolder = ResourceHolder<sf::Texture, TextureID>;
 using FontHolder = ResourceHolder<sf::Font, FontID>;
 using SoundBufferHolder = ResourceHolder<sf::SoundBuffer, SoundID>;
-
+using MusicStreamNameHolder = ResourceHolder<std::string, MusicID>;
 
 #endif // RESOURCEIDENTIFIERS_H

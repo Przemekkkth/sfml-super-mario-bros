@@ -142,6 +142,7 @@ add_executable(mario
     src/ECS/systems/EnemySystem.h src/ECS/systems/EnemySystem.cpp
     src/ECS/systems/WarpSystem.h src/ECS/systems/WarpSystem.cpp
     src/ECS/systems/SoundSystem.h src/ECS/systems/SoundSystem.cpp
+    src/ECS/systems/MusicSystem.h src/ECS/systems/MusicSystem.cpp
 
 )
 

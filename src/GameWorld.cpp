@@ -7,6 +7,7 @@
 #include "ECS/systems/FlagSystem.h"
 #include "ECS/systems/HUDSystem.h"
 #include "ECS/systems/MapSystem.h"
+#include "ECS/systems/MusicSystem.h"
 #include "ECS/systems/PhysicsSystem.h"
 #include "ECS/systems/PlayerSystem.h"
 #include "ECS/systems/RenderSystem.h"
@@ -41,10 +42,13 @@ GameWorld::GameWorld(StateManager *stateManager)
     m_world->registerSystem<FlagSystem>(this);
     m_world->registerSystem<WarpSystem>(this);
     m_world->registerSystem<SoundSystem>();
+    m_world->registerSystem<MusicSystem>();
+    setLevelMusic();
 }
 
 GameWorld::~GameWorld()
 {
+    delete m_world;
 }
 
 void GameWorld::HandlePlayerInput(const std::optional<sf::Event> &event)
@@ -88,6 +92,47 @@ void GameWorld::switchLevel()
 void GameWorld::setUnderwater(bool on)
 {
     m_world->getSystem<PlayerSystem>()->setUnderwater(on);
+}
+
+void GameWorld::setLevelMusic()
+{
+    LevelType type = d.getLevelType();
+    auto musicSystem = m_world->getSystem<MusicSystem>();
+    switch (type) {
+    case LevelType::Overworld:
+    case LevelType::StartUnderground:
+        musicSystem->playMusic(MusicID::Overworld);
+        break;
+    case LevelType::Underground:
+        musicSystem->playMusic(MusicID::Underground);
+        break;
+    case LevelType::Castle:
+        musicSystem->playMusic(MusicID::Castle);
+        break;
+    case LevelType::Underwater:
+        musicSystem->playMusic(MusicID::Underwater);
+        break;
+    }
+}
+
+void GameWorld::setLevelMusic(LevelType type)
+{
+    auto musicSystem = m_world->getSystem<MusicSystem>();
+    switch (type) {
+    case LevelType::Overworld:
+    case LevelType::StartUnderground:
+        musicSystem->playMusic(MusicID::Overworld);
+        break;
+    case LevelType::Underground:
+        musicSystem->playMusic(MusicID::Underground);
+        break;
+    case LevelType::Castle:
+        musicSystem->playMusic(MusicID::Castle);
+        break;
+    case LevelType::Underwater:
+        musicSystem->playMusic(MusicID::Underwater);
+        break;
+    }
 }
 
 void GameWorld::setMaxCameraXFromLevelData()

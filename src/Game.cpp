@@ -8,6 +8,7 @@
 TextureHolder* Game::s_textureHolder = new TextureHolder;
 FontHolder* Game::s_fontHolder = new FontHolder;
 SoundBufferHolder *Game::s_soundBufferHolder = new SoundBufferHolder;
+MusicStreamNameHolder *Game::s_musicStreamNameHolder = new MusicStreamNameHolder;
 
 Game::Game()
     : m_elapsed(0.0f), m_stateManager(&m_context)
@@ -18,6 +19,7 @@ Game::Game()
     loadFonts();
     loadMaps();
     loadSounds();
+    loadMusic();
     m_context.m_window = &m_window;
     m_stateManager.SwitchTo(StateType::MainMenu);
 }
@@ -59,7 +61,7 @@ void Game::loadTextures()
 
 void Game::loadFonts()
 {
-    s_fontHolder->loadFont(FontID::Main, "assets/fonts/press-start-2p.ttf");
+    s_fontHolder->openFromFile(FontID::Main, "assets/fonts/press-start-2p.ttf");
 }
 
 void Game::loadMaps()
@@ -93,6 +95,29 @@ void Game::loadSounds()
     s_soundBufferHolder->load(SoundID::Shrink, "assets/sounds/effects/shrink.wav");
     s_soundBufferHolder->load(SoundID::Stomp, "assets/sounds/effects/stomp.wav");
     s_soundBufferHolder->load(SoundID::TimerTick, "assets/sounds/effects/timertick.wav");
+}
+
+void Game::loadMusic()
+{
+    s_musicStreamNameHolder->insertResource(MusicID::Castle,
+                                            std::make_unique<std::string>(
+                                                "assets/sounds/music/castle.wav"));
+
+    s_musicStreamNameHolder->insertResource(MusicID::GameWon,
+                                            std::make_unique<std::string>(
+                                                "assets/sounds/music/gamewon.wav"));
+    s_musicStreamNameHolder->insertResource(MusicID::Overworld,
+                                            std::make_unique<std::string>(
+                                                "assets/sounds/music/overworld.wav"));
+    s_musicStreamNameHolder->insertResource(MusicID::SuperStar,
+                                            std::make_unique<std::string>(
+                                                "assets/sounds/music/superstar.wav"));
+    s_musicStreamNameHolder->insertResource(MusicID::Underground,
+                                            std::make_unique<std::string>(
+                                                "assets/sounds/music/underground.wav"));
+    s_musicStreamNameHolder->insertResource(MusicID::Underwater,
+                                            std::make_unique<std::string>(
+                                                "assets/sounds/music/underwater.wav"));
 }
 
 void Game::HandleInput()

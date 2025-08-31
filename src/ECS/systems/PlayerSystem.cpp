@@ -30,6 +30,7 @@
 #include "../components/LeftCollisionComponent.h"
 #include "../components/MovingComponent.h"
 #include "../components/MovingPlatformComponent.h"
+#include "../components/MusicComponent.h"
 #include "../components/MysteryBoxComponent.h"
 #include "../components/ParticleComponent.h"
 #include "../components/PlayerComponent.h"
@@ -1365,13 +1366,10 @@ void PlayerSystem::grow(GrowType type)
             [](Entity *entity) {
                 auto player = entity->getComponent<PlayerComponent>();
                 player->setSuperStar(false);
-                //self.scene:resumeLastPlayedMusic()
             },
             600);
-        /*
-        local superStarMusic = Concord.entity(world)
-        superStarMusic:give('music_component', MUSIC_ID.SUPER_STAR)
-*/
+        auto superStarMusic = m_world->create();
+        superStarMusic->addComponent<MusicComponent>(MusicID::SuperStar);
     } else if (type == GrowType::Mushroom) {
         auto addScore = m_world->create();
         addScore->addComponent<AddScoreComponent>(1000);

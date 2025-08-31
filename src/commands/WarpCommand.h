@@ -141,7 +141,7 @@ public:
                 });
 
                 scene->setUnderwater(warpPipe->getLevelType() == LevelType::Underwater);
-                //scene->setLevelMusic(warpPipe->levelType);
+                scene->setLevelMusic(warpPipe->getLevelType());
 
                 Camera::GetInstance().setCameraX(warpPipe->getCameraLocation().x
                                                  * GLOBALS::SCALED_CUBE_SIZE);
