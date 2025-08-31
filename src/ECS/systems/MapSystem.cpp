@@ -51,6 +51,7 @@
 #include "../components/PlatformLevelComponent.h"
 #include "../components/PlayerComponent.h"
 #include "../components/ProjectileComponent.h"
+#include "../components/SoundComponent.h"
 #include "../components/SpritesheetComponent.h"
 #include "../components/TextComponent.h"
 #include "../components/TextureComponent.h"
@@ -1317,6 +1318,9 @@ void MapSystem::createBowser(int x, int y, int id)
         entity->addComponent<CallbackComponent>(
             [=](Entity *entity) {
                 animation->setFrameIDs(mouthOpenAnim);
+                auto blastSound = m_world->create();
+                blastSound->addComponent<SoundComponent>(SoundID::BowserFire);
+
                 //local blastSound = Concord.entity(self.world)
                 // blastSound:give('sound_component', SOUND_ID.BOWSER_FIRE)
                 auto fireBlast = m_world->create();
@@ -2153,8 +2157,8 @@ void MapSystem::dispenseCoin(Entity *originalBlock, int id)
 
 void MapSystem::dispenseStar(Entity *originalBlock, int id)
 {
-    // Entity* dispenseSound(world->create());
-    // dispenseSound->addComponent<SoundComponent>(SoundID::POWER_UP_APPEAR);
+    Entity *dispenseSound(m_world->create());
+    dispenseSound->addComponent<SoundComponent>(SoundID::PowerUpAppear);
     auto blockTransform = originalBlock->getComponent<TransformComponent>();
 
     Entity *star = m_world->create();
@@ -2191,8 +2195,8 @@ void MapSystem::dispenseStar(Entity *originalBlock, int id)
 
 void MapSystem::dispenseOneUp(Entity *originalBlock, int id)
 {
-    // Entity* dispenseSound(world->create());
-    // dispenseSound->addComponent<SoundComponent>(SoundID::POWER_UP_APPEAR);
+    Entity *dispenseSound(m_world->create());
+    dispenseSound->addComponent<SoundComponent>(SoundID::PowerUpAppear);
 
     auto *blockTransform = originalBlock->getComponent<TransformComponent>();
 

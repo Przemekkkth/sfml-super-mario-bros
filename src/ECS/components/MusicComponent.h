@@ -9,6 +9,9 @@ public:
     MusicComponent(MusicID musicID)
         : m_musicID{musicID}
     {}
+
+    MusicID getId() const { return m_musicID; }
+
 private:
     MusicID m_musicID;
 };

@@ -23,10 +23,15 @@ public:
     Window* GetWindow();
     static TextureHolder* s_textureHolder;
     static FontHolder* s_fontHolder;
+    static SoundBufferHolder *s_soundBufferHolder;
+    static MusicStreamNameHolder *s_musicStreamNameHolder;
+
 private:
     void loadTextures();
     void loadFonts();
     void loadMaps();
+    void loadSounds();
+    void loadMusic();
     SharedContext m_context;
     Window m_window;
 

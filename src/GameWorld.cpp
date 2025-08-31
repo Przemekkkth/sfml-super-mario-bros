@@ -7,9 +7,11 @@
 #include "ECS/systems/FlagSystem.h"
 #include "ECS/systems/HUDSystem.h"
 #include "ECS/systems/MapSystem.h"
+#include "ECS/systems/MusicSystem.h"
 #include "ECS/systems/PhysicsSystem.h"
 #include "ECS/systems/PlayerSystem.h"
 #include "ECS/systems/RenderSystem.h"
+#include "ECS/systems/SoundSystem.h"
 #include "ECS/systems/WarpSystem.h"
 #include "Game.h"
 #include "Globals.h"
@@ -39,14 +41,23 @@ GameWorld::GameWorld(StateManager *stateManager)
     m_world->registerSystem<CallbackSystem>();
     m_world->registerSystem<FlagSystem>(this);
     m_world->registerSystem<WarpSystem>(this);
+    m_world->registerSystem<SoundSystem>();
+    m_world->registerSystem<MusicSystem>();
+    setLevelMusic();
 }
 
 GameWorld::~GameWorld()
 {
+    delete m_world;
 }
 
 void GameWorld::HandlePlayerInput(const std::optional<sf::Event> &event)
 {
+    if (const auto *keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+        if (keyPressed->scancode == sf::Keyboard::Scancode::P && m_world->getSystem<SoundSystem>()) {
+            m_world->getSystem<SoundSystem>()->playSound(SoundID::Pause);
+        }
+    }
     m_world->handleInput(event);
 }
 
@@ -81,6 +92,47 @@ void GameWorld::switchLevel()
 void GameWorld::setUnderwater(bool on)
 {
     m_world->getSystem<PlayerSystem>()->setUnderwater(on);
+}
+
+void GameWorld::setLevelMusic()
+{
+    LevelType type = d.getLevelType();
+    auto musicSystem = m_world->getSystem<MusicSystem>();
+    switch (type) {
+    case LevelType::Overworld:
+    case LevelType::StartUnderground:
+        musicSystem->playMusic(MusicID::Overworld);
+        break;
+    case LevelType::Underground:
+        musicSystem->playMusic(MusicID::Underground);
+        break;
+    case LevelType::Castle:
+        musicSystem->playMusic(MusicID::Castle);
+        break;
+    case LevelType::Underwater:
+        musicSystem->playMusic(MusicID::Underwater);
+        break;
+    }
+}
+
+void GameWorld::setLevelMusic(LevelType type)
+{
+    auto musicSystem = m_world->getSystem<MusicSystem>();
+    switch (type) {
+    case LevelType::Overworld:
+    case LevelType::StartUnderground:
+        musicSystem->playMusic(MusicID::Overworld);
+        break;
+    case LevelType::Underground:
+        musicSystem->playMusic(MusicID::Underground);
+        break;
+    case LevelType::Castle:
+        musicSystem->playMusic(MusicID::Castle);
+        break;
+    case LevelType::Underwater:
+        musicSystem->playMusic(MusicID::Underwater);
+        break;
+    }
 }
 
 void GameWorld::setMaxCameraXFromLevelData()

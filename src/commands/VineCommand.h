@@ -60,7 +60,7 @@ public:
 
                 //warpSystem->setTeleportLevelType(scene->getCurrentLevelType());
                 //scene->setCurrentLevelType(vineComponent->newLevelType);
-                //scene->setLevelMusic(vineComponent->newLevelType);
+                scene->setLevelMusic(vineComponent->getNewLevelType());
                 // Moves the vines upwards
                 for (auto *vinePiece : *vineParts) {
                     vinePiece->getComponent<MovingComponent>()->getVelocity().y = -1.0f;

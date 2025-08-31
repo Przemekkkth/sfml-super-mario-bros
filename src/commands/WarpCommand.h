@@ -10,6 +10,7 @@
 #include "../ECS/components/MovingComponent.h"
 #include "../ECS/components/ParticleComponent.h"
 #include "../ECS/components/PiranhaPlantComponent.h"
+#include "../ECS/components/SoundComponent.h"
 #include "../ECS/components/TimerComponent.h"
 #include "../ECS/components/TransformComponent.h"
 #include "../ECS/components/WaitUntilComponent.h"
@@ -47,8 +48,8 @@ public:
 
         // scene->stopMusic();
 
-        // Entity* pipeSound(world->create());
-        // pipeSound->addComponent<SoundComponent>(SoundID::PIPE);
+        Entity *pipeSound(world->create());
+        pipeSound->addComponent<SoundComponent>(SoundID::Pipe);
 
         player->addComponent<CollisionExemptComponent>();
         player->addComponent<FrictionExemptComponent>();
@@ -140,7 +141,7 @@ public:
                 });
 
                 scene->setUnderwater(warpPipe->getLevelType() == LevelType::Underwater);
-                //scene->setLevelMusic(warpPipe->levelType);
+                scene->setLevelMusic(warpPipe->getLevelType());
 
                 Camera::GetInstance().setCameraX(warpPipe->getCameraLocation().x
                                                  * GLOBALS::SCALED_CUBE_SIZE);

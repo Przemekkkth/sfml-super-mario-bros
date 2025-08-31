@@ -28,6 +28,8 @@ public:
 
     void switchLevel();
     void setUnderwater(bool on);
+    void setLevelMusic();
+    void setLevelMusic(LevelType type);
 
 private:
     void setMaxCameraXFromLevelData();
