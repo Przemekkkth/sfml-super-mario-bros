@@ -197,7 +197,7 @@ void FlagSystem::hitAxe()
     playerMove->getAcceleration() = sf::Vector2f(0.0f, 0.0f);
 
     //self.scene:stopTimer()
-    //self.scene:stopMusic()
+    m_world->getSystem<MusicSystem>()->stop();
 
     player->remove<GravityComponent>();
     player->addComponent<FrictionExemptComponent>();
@@ -267,24 +267,6 @@ void FlagSystem::hitAxe()
             [player]() -> bool { return player->hasComponent<RightCollisionComponent>(); }),
         new RunCommand([=]() mutable {
             inSequence = false;
-
-            // CommandScheduler::getInstance().addCommand(new DelayedCommand(
-            //     [=]() {
-            //         sf::Vector2i nextLevel = m_gameWorld->getLevelData()
-            //                                      .getNextLevel(); //scene->getLevelData().nextLevel;
-
-            //         if (nextLevel != sf::Vector2i(0, 0)) {
-            //             player->getComponent<TextureComponent>()->setVisible(false);
-            //         } else {
-            //             //Entity *winMusic(world->create());
-            //             //winMusic->addComponent<MusicComponent>(MusicID::GAME_WON);
-            //         }
-
-            //         GameData::LEVEL = m_gameWorld->d.getNextLevel().x;
-            //         GameData::SUB_LEVEL = m_gameWorld->d.getNextLevel().y;
-            //         m_gameWorld->switchLevel();
-            //     },
-            //     3.0f));
         }),
         new DelayedCommand(
             [=]() {
