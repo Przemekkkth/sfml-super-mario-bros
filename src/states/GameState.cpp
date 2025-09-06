@@ -78,8 +78,7 @@ void GameState::Draw()
 void GameState::HandlePlayerInput(const std::optional<sf::Event> &event)
 {
     m_world->HandlePlayerInput(event);
-    if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
-    {
+    if (const auto *keyPressed = event->getIf<sf::Event::KeyPressed>()) {
         if (keyPressed->scancode == sf::Keyboard::Scancode::P) {
             m_stateMgr->SwitchTo(StateType::Paused);
         }

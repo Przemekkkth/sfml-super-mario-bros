@@ -17,6 +17,8 @@ public:
     {
         return m_finished;
     }
+    void hide();
+    void show();
 
 private:
     Entity* m_optionsBackground;

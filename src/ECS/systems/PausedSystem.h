@@ -15,6 +15,10 @@ public:
     bool isOptionsOpened() const;
     bool isMenuOpened() const;
     bool isFinished() const;
+    void hide();
+    void show();
+    void disableOptions();
+
 private:
     Entity* m_selectCursor, *m_pausedText, *m_continueText, *m_optionsText, *m_endText;
     int m_currentIndex;

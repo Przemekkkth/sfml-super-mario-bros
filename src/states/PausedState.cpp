@@ -1,17 +1,19 @@
 #include "PausedState.h"
-#include "../Globals.h"
-#include "StateManager.h"
-#include <iostream>
 #include "../ECS/World.h"
+#include "../ECS/systems/OptionsSystem.h"
 #include "../ECS/systems/PausedSystem.h"
 #include "../ECS/systems/RenderSystem.h"
-#include "../ECS/systems/OptionsSystem.h"
+#include "../Globals.h"
+#include "StateManager.h"
 
 PausedState::PausedState(StateManager *stateManager)
     : BaseState(stateManager), m_world{new World()}
 {
     SetTransparent(true);
-    m_world->registerSystem<PausedSystem>();
+    m_pausedSystem = m_world->registerSystem<PausedSystem>();
+    m_optionsSystem = m_world->registerSystem<OptionsSystem>();
+    m_optionsSystem->hide();
+    m_optionsSystem->setEnabled(false);
     m_world->registerSystem<RenderSystem>(stateManager->GetContext()->m_window->GetRenderWindow());
 }
 
@@ -43,29 +45,30 @@ void PausedState::Deactivate()
 void PausedState::Update(const sf::Time &time)
 {
     m_world->tick();
-    if(m_world->hasSystem<PausedSystem>() && m_world->getSystem<PausedSystem>()->isOptionsOpened())
-    {
-        m_world->unregisterSystem<PausedSystem>();
-        m_world->registerSystem<OptionsSystem>();
+    if (m_pausedSystem->isOptionsOpened()) {
+        m_pausedSystem->hide();
+        m_optionsSystem->show();
+        m_pausedSystem->setEnabled(false);
+        m_optionsSystem->setEnabled(true);
     }
 
-    if(m_world->hasSystem<PausedSystem>() && m_world->getSystem<PausedSystem>()->isMenuOpened())
-    {
+    if (m_pausedSystem->isMenuOpened()) {
         GetStateManager()->Remove(StateType::Paused);
         GetStateManager()->Remove(StateType::Game);
         GetStateManager()->SwitchTo(StateType::MainMenu);
     }
 
-    if(m_world->hasSystem<PausedSystem>() && m_world->getSystem<PausedSystem>()->isFinished())
-    {
+    if (m_pausedSystem->isFinished()) {
         GetStateManager()->Remove(StateType::Paused);
         GetStateManager()->SwitchTo(StateType::Game);
     }
 
-    if(m_world->hasSystem<OptionsSystem>() && m_world->getSystem<OptionsSystem>()->isFinished())
-    {
-        m_world->unregisterSystem<OptionsSystem>();
-        m_world->registerSystem<PausedSystem>();
+    if (m_optionsSystem->isFinished()) {
+        m_optionsSystem->hide();
+        m_pausedSystem->disableOptions();
+        m_pausedSystem->show();
+        m_pausedSystem->setEnabled(true);
+        m_optionsSystem->setEnabled(false);
     }
 }
 
@@ -77,13 +80,4 @@ void PausedState::Draw()
 void PausedState::HandlePlayerInput(const std::optional<sf::Event> &event)
 {
     m_world->handleInput(event);
-
-    if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
-    {
-
-        if (keyPressed->scancode == sf::Keyboard::Scancode::P)
-        {
-
-        }
-    }
 }

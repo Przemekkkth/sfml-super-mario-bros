@@ -3,6 +3,8 @@
 #include "BaseState.h"
 
 class World;
+class PausedSystem;
+class OptionsSystem;
 class PausedState : public BaseState
 {
 public:
@@ -19,6 +21,8 @@ public:
 
 private:
     World* m_world;
+    PausedSystem *m_pausedSystem;
+    OptionsSystem *m_optionsSystem;
 };
 
 #endif // PAUSEDSTATE_H

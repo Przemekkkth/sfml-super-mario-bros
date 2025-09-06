@@ -90,7 +90,7 @@ void OptionsSystem::onAddedToWorld(World *world)
     m_goBackText = world->create();
     m_goBackText->addComponent<TransformComponent>(
         sf::Vector2f{6.f * GLOBALS::SCALED_CUBE_SIZE, 9.f * GLOBALS::SCALED_CUBE_SIZE});
-    m_goBackText->addComponent<TextComponent>("GO BACK (ESCAPE KEY)", 16);
+    m_goBackText->addComponent<TextComponent>("GO BACK (BACKSPACE)", 16);
 }
 
 void OptionsSystem::tick(World *world)
@@ -127,4 +127,42 @@ void OptionsSystem::onRemovedFromWorld(World *world)
     world->destroy(m_fireballKeybindText);
     world->destroy(m_fireballKeyName);
     world->destroy(m_goBackText);
+}
+
+void OptionsSystem::hide()
+{
+    m_optionsBackground->getComponent<TextureComponent>()->setVisible(false);
+    m_infoBackground->getComponent<TextureComponent>()->setVisible(false);
+    m_leftKeybindText->getComponent<TextComponent>()->setVisible(false);
+    m_leftKeyName->getComponent<TextComponent>()->setVisible(false);
+    m_rightKeybindText->getComponent<TextComponent>()->setVisible(false);
+    m_rightKeyName->getComponent<TextComponent>()->setVisible(false);
+    m_jumpKeybindText->getComponent<TextComponent>()->setVisible(false);
+    m_jumpKeyName->getComponent<TextComponent>()->setVisible(false);
+    m_duckKeybindText->getComponent<TextComponent>()->setVisible(false);
+    m_duckKeyName->getComponent<TextComponent>()->setVisible(false);
+    m_sprintKeybindText->getComponent<TextComponent>()->setVisible(false);
+    m_sprintKeyName->getComponent<TextComponent>()->setVisible(false);
+    m_fireballKeybindText->getComponent<TextComponent>()->setVisible(false);
+    m_fireballKeyName->getComponent<TextComponent>()->setVisible(false);
+    m_goBackText->getComponent<TextComponent>()->setVisible(false);
+}
+
+void OptionsSystem::show()
+{
+    m_optionsBackground->getComponent<TextureComponent>()->setVisible(true);
+    m_infoBackground->getComponent<TextureComponent>()->setVisible(true);
+    m_leftKeybindText->getComponent<TextComponent>()->setVisible(true);
+    m_leftKeyName->getComponent<TextComponent>()->setVisible(true);
+    m_rightKeybindText->getComponent<TextComponent>()->setVisible(true);
+    m_rightKeyName->getComponent<TextComponent>()->setVisible(true);
+    m_jumpKeybindText->getComponent<TextComponent>()->setVisible(true);
+    m_jumpKeyName->getComponent<TextComponent>()->setVisible(true);
+    m_duckKeybindText->getComponent<TextComponent>()->setVisible(true);
+    m_duckKeyName->getComponent<TextComponent>()->setVisible(true);
+    m_sprintKeybindText->getComponent<TextComponent>()->setVisible(true);
+    m_sprintKeyName->getComponent<TextComponent>()->setVisible(true);
+    m_fireballKeybindText->getComponent<TextComponent>()->setVisible(true);
+    m_fireballKeyName->getComponent<TextComponent>()->setVisible(true);
+    m_goBackText->getComponent<TextComponent>()->setVisible(true);
 }

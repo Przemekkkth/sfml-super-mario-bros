@@ -101,6 +101,31 @@ bool PausedSystem::isFinished() const
     return m_isFinished;
 }
 
+void PausedSystem::hide()
+{
+    m_pausedText->getComponent<TextComponent>()->setVisible(false);
+    m_selectCursor->getComponent<TextComponent>()->setVisible(false);
+    m_pausedText->getComponent<TextComponent>()->setVisible(false);
+    m_continueText->getComponent<TextComponent>()->setVisible(false);
+    m_optionsText->getComponent<TextComponent>()->setVisible(false);
+    m_endText->getComponent<TextComponent>()->setVisible(false);
+}
+
+void PausedSystem::show()
+{
+    m_pausedText->getComponent<TextComponent>()->setVisible(true);
+    m_selectCursor->getComponent<TextComponent>()->setVisible(true);
+    m_pausedText->getComponent<TextComponent>()->setVisible(true);
+    m_continueText->getComponent<TextComponent>()->setVisible(true);
+    m_optionsText->getComponent<TextComponent>()->setVisible(true);
+    m_endText->getComponent<TextComponent>()->setVisible(true);
+}
+
+void PausedSystem::disableOptions()
+{
+    m_isOptionsOpened = false;
+}
+
 void PausedSystem::onRemovedFromWorld(World *world)
 {
     world->destroy(m_pausedText);
