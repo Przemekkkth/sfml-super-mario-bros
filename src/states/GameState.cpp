@@ -52,7 +52,7 @@ void GameState::Update(const sf::Time &time)
             m_shouldChangeLvl = true;
             if (m_shouldChangeLvl) {
                 CommandScheduler::getInstance().addCommand(new SequenceCommand{
-                    std::vector<Command *>{new WaitCommand{2.f}, new RunCommand{[this]() {
+                    std::vector<Command *>{new WaitCommand{3.f}, new RunCommand{[this]() {
                                                this->GetStateManager()->Remove(StateType::Game);
                                                if (GameData::LIVES > 0) {
                                                    this->GetStateManager()->SwitchTo(

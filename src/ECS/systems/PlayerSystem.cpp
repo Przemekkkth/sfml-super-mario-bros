@@ -45,6 +45,7 @@
 #include "../components/TransformComponent.h"
 #include "../components/WaitUntilComponent.h"
 #include "FlagSystem.h"
+#include "MusicSystem.h"
 #include "WarpSystem.h"
 
 #include "HUDSystem.h"
@@ -1144,6 +1145,7 @@ void PlayerSystem::onGameOver(bool outOfBounds)
     m_mario->addComponent<ParticleComponent>();
     spritesheet->setSpritesheetCoordinates(Map::PlayerIDCoordinates.at(1));
     m_currentState = AnimationState::Gameover;
+    m_world->getSystem<MusicSystem>()->stop();
     auto deathSound = m_world->create();
     deathSound->addComponent<SoundComponent>(SoundID::Death);
 
