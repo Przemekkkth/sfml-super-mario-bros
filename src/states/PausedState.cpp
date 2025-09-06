@@ -17,7 +17,7 @@ PausedState::PausedState(StateManager *stateManager)
 
 PausedState::~PausedState()
 {
-
+    delete m_world;
 }
 
 void PausedState::OnCreate()
