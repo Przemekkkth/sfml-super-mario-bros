@@ -7,7 +7,10 @@
 #include "OptionsSystem.h"
 
 PausedSystem::PausedSystem()
-    : m_currentIndex(0), m_isOptionsOpened(false)
+    : m_currentIndex(0)
+    , m_isOptionsOpened(false)
+    , m_isMenuOpened(false)
+    , m_isFinished(false)
 {}
 
 void PausedSystem::onAddedToWorld(World *world)
