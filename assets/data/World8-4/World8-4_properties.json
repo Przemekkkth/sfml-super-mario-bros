@@ -22,7 +22,7 @@
 		{"pipe_coords": [229, 8], "teleport_coords": [252, 28], "camera_coords": [248, 18], "going_in": "DOWN", "going_out": "NONE", "freeze_camera": false, "bg_color": "BLUE", "level_type": "UNDERWATER", "level_to_go": [0, 0]},
 
 		{"pipe_coords": [316, 26], "teleport_coords": [259, 11], "camera_coords": [256, 0], "going_in": "RIGHT", "going_out": "UP", "freeze_camera": false, "bg_color": "BLACK", "level_type": "CASTLE", "level_to_go": [0, 0]},
-		{"pipe_coords": [267, 11], "teleport_coords": [19, 11], "camera_coords": [16, 0], "going_in": "DOWN", "going_out": "UP", "freeze_camera": false, "bg_color": "BLACK", "level_type": "CASTLE", "level_to_go": [0, 0]},
+		{"pipe_coords": [267, 11], "teleport_coords": [19, 11], "camera_coords": [16, 0], "going_in": "DOWN", "going_out": "UP", "freeze_camera": false, "bg_color": "BLACK", "level_type": "CASTLE", "level_to_go": [0, 0]}
 	],
     "MOVING_PLATFORM": [
 		{"coords": [70, 13], "motion": "BACK_AND_FORTH", "direction": "LEFT", "point": [66, 74], "shift": false}
