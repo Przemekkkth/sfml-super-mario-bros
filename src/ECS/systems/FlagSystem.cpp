@@ -15,6 +15,7 @@
 #include "../../ECS/components/GravityComponent.h"
 #include "../../ECS/components/LeftCollisionComponent.h"
 #include "../../ECS/components/MovingComponent.h"
+#include "../../ECS/components/MusicComponent.h"
 #include "../../ECS/components/PlayerComponent.h"
 #include "../../ECS/components/RightCollisionComponent.h"
 #include "../../ECS/components/SoundComponent.h"
@@ -273,15 +274,14 @@ void FlagSystem::hitAxe()
                 sf::Vector2i nextLevel = m_gameWorld->d.getNextLevel();
 
                 if (nextLevel != sf::Vector2i(0, 0)) {
-                    //player->getComponent<TextureComponent>()->setVisible(false);
+                    GameData::LEVEL = m_gameWorld->d.getNextLevel().x;
+                    GameData::SUB_LEVEL = m_gameWorld->d.getNextLevel().y;
+                    m_gameWorld->switchLevel();
                 } else {
-                    //Entity *winMusic(world->create());
-                    //winMusic->addComponent<MusicComponent>(MusicID::GAME_WON);
+                    Entity *winMusic(m_world->create());
+                    winMusic->addComponent<MusicComponent>(MusicID::GameWon);
+                    m_gameWorld->switchToMenu();
                 }
-
-                GameData::LEVEL = m_gameWorld->d.getNextLevel().x;
-                GameData::SUB_LEVEL = m_gameWorld->d.getNextLevel().y;
-                m_gameWorld->switchLevel();
             },
             3.0f)}));
 }

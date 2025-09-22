@@ -27,6 +27,7 @@ public:
     LevelData d;
 
     void switchLevel();
+    void switchToMenu();
     void setUnderwater(bool on);
     void setLevelMusic();
     void setLevelMusic(LevelType type);

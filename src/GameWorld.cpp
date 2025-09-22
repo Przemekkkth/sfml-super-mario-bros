@@ -89,6 +89,12 @@ void GameWorld::switchLevel()
     m_stateManager->SwitchTo(StateType::PreGame);
 }
 
+void GameWorld::switchToMenu()
+{
+    m_stateManager->Remove(StateType::Game);
+    m_stateManager->SwitchTo(StateType::MainMenu);
+}
+
 void GameWorld::setUnderwater(bool on)
 {
     m_world->getSystem<PlayerSystem>()->setUnderwater(on);
